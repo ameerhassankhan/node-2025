@@ -1,9 +1,15 @@
 const http =  require('http');
-
+const fs = require('fs');
 http.createServer((req,resp)=>{
-    resp.end('Hello, World! from server 1');
-}).listen(3000);
-
-http.createServer((req,resp)=>{
-    resp.end('Hello, World! from server 2 hello  wqqc ');
-}).listen(3001);
+    fs.readFile('html/index.html',"utf-8", (err, data) => {
+        if (err){
+            resp.writeHead(500, {'Content-Type': 'text/html'});
+            resp.write('<h1 style="color:red">Error reading file</h1>');
+            resp.end();
+            return; 
+        }
+        resp.writeHead(200, {'Content-Type': 'text/html'});
+        resp.write(data);
+        resp.end();
+    }   
+)}).listen(4000);
